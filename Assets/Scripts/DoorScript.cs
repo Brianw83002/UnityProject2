@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DoorScript : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class DoorScript : MonoBehaviour
     public AudioClip lockedSound;   // sound when door is locked
 
     private bool playerInRange = false; // track if player is overlapping
+    private bool isDoorOpen;
+    public string GoToLevelName;
 
     void Start()
     {
@@ -29,6 +32,7 @@ public class DoorScript : MonoBehaviour
 
         spriteRenderer.sprite = doorClosed; // start closed
         if (prompt != null) prompt.SetActive(false); // hide initially
+        isDoorOpen = false;
     }
 
     void Update()
@@ -36,14 +40,20 @@ public class DoorScript : MonoBehaviour
         if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
             Debug.Log("Pressed E");
+            
             if (isDoorLocked)
             {
                 audioSource.clip = lockedSound;
                 audioSource.Play();
             }
 
-            //Open Door
-            OpenDoor();
+            //Open Door if closed and not locked
+            if (!isDoorOpen && !isDoorLocked)
+            {
+                OpenDoor();
+                isDoorOpen = true;
+                SceneManager.LoadScene(GoToLevelName);
+            }
         }
     }
 
@@ -69,8 +79,12 @@ public class DoorScript : MonoBehaviour
             if (prompt != null) prompt.SetActive(false); // hide E prompt
         }
 
-        // close the door
-        CloseDoor();
+        // close the door if open
+        if (isDoorOpen)
+        {
+            CloseDoor();
+            isDoorOpen = false;
+        }
     }
 
 
