@@ -10,7 +10,7 @@ public class MainMenuScript : MonoBehaviour
     public void StartGame()
     {
         Debug.Log("Start Game");
-        SceneManager.LoadSceneAsync("world");
+        SceneManager.LoadSceneAsync("Level1");
     }
 
     public void QuitGame()

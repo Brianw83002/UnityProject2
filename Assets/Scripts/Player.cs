@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpCount--;
-            Debug.Log("JumpCount: " + jumpCount);
+            //Debug.Log("JumpCount: " + jumpCount);
         }
     }
 
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
         if (Mathf.Abs(rb.linearVelocity.y) < 0.01f)
         {
             jumpCount = maxJumps;  // reset jumps
-            Debug.Log("JumpCount: " + jumpCount);
+            //Debug.Log("JumpCount: " + jumpCount);
         }
     }
 
