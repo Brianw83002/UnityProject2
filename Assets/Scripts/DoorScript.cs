@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class DoorScript : MonoBehaviour
 {
@@ -50,9 +51,7 @@ public class DoorScript : MonoBehaviour
             //Open Door if closed and not locked
             if (!isDoorOpen && !isDoorLocked)
             {
-                OpenDoor();
-                isDoorOpen = true;
-                SceneManager.LoadScene(GoToLevelName);
+                StartCoroutine(OpenDoorAndLoad());
             }
         }
     }
@@ -123,4 +122,20 @@ public class DoorScript : MonoBehaviour
             audioSource.Play();
         }
     }
+
+
+
+
+    IEnumerator OpenDoorAndLoad()
+    {
+        OpenDoor();
+        isDoorOpen = true;
+
+        // wait until the door sound finishes
+        yield return new WaitWhile(() => audioSource.isPlaying);
+
+        SceneManager.LoadScene(GoToLevelName);
+    }
 }
+
+
