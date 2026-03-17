@@ -1,31 +1,61 @@
 using UnityEngine;
+using UnityEngine.Audio;
+using System.Collections;
 
 public class EnemyScript : MonoBehaviour
 {
-    public Transform target;
-    public float speed = 4f;
+    private SpriteRenderer sprite;
+    private AudioSource audioSource;
+    public AudioClip scareAudio;
 
-    Rigidbody2D rb;
+    public bool renderSpriteOnScare;
+    private int scareCount;
 
-    void Awake()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+        sprite = GetComponent<SpriteRenderer>();
+        hideSprite(sprite);
+
+        scareCount = 1;
     }
 
-    void FixedUpdate()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (target == null) return;
-
-        Vector2 direction = ((Vector2)target.position - rb.position).normalized;
-        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Base"))
+        if (scareCount > 0)
         {
-            Destroy(gameObject);
+            scareCount--;
+            if (renderSpriteOnScare) showSprite(sprite); //If set true then it shows the sprite
+            playSound();
+            StartCoroutine(WaitTillSoundEnd()); //wait till sound finish
+        }
+        
+    }
+
+    private void playSound()
+    {
+        if (scareAudio != null)
+        {
+            audioSource.clip = scareAudio;
+            audioSource.Play();
         }
     }
+
+    private void showSprite(SpriteRenderer sprite)
+    {
+        sprite.enabled = true;
+    }
+
+    private void hideSprite(SpriteRenderer sprite)
+    {
+        sprite.enabled = false;
+    }
+
+    IEnumerator WaitTillSoundEnd()
+    {
+        yield return new WaitWhile(() => audioSource.isPlaying);
+        Destroy(gameObject);
+    }
+       
 
 }

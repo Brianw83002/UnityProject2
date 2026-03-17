@@ -25,12 +25,6 @@ public class DoorScript : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
 
-
-        if (audioSource == null)
-        {
-            audioSource = gameObject.AddComponent<AudioSource>();
-        }
-
         spriteRenderer.sprite = doorClosed; // start closed
         if (prompt != null) prompt.SetActive(false); // hide initially
         isDoorOpen = false;

@@ -1,4 +1,3 @@
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +5,8 @@ public class MainMenuScript : MonoBehaviour
 {
     public AudioSource audioSource;
     public AudioClip clip;
+
+    public GameObject PauseScreen;
 
     public void StartGame()
     {
@@ -19,14 +20,27 @@ public class MainMenuScript : MonoBehaviour
         Application.Quit();
     }
 
+    public void GoToMainMenu()
+    {
+        Debug.Log("Go to Main Menu");
+        SceneManager.LoadSceneAsync("MainMenu");
+    }
 
+
+    public void Continue()
+    {
+        PauseScreen.SetActive(false);
+    }
 
     public void PlayClickSound()
     {
-        if (audioSource != null)
+        if (audioSource == null)
         {
-            Debug.Log("audioSource Empty");
+            Debug.Log("audioSource is null");
+            return;
         }
+        Debug.Log("audioSource Empty");
+        
         audioSource.Play();
     }
 
