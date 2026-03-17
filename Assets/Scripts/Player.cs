@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     public GameObject PauseScreen;
 
 
+    public Animator anim;
+
     public InputActionReference move;
     public InputActionReference jump;
     public InputActionReference Sprint;
@@ -22,11 +24,13 @@ public class Player : MonoBehaviour
     private int maxJumps = 2;
     public float airControl = 3f;   // <-- declared here
     Rigidbody2D rb;
-
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    { 
+    {
+        anim = GetComponent<Animator>();
+
         paused = false;
         PauseScreen.SetActive(false);
         rb = GetComponent<Rigidbody2D>();
@@ -44,10 +48,9 @@ public class Player : MonoBehaviour
 
             if (Pause.action.IsPressed()) PauseGame();
         }
-        else if (Pause.action.IsPressed()) PauseScreen.SetActive(false);
         
-
-        }
+    
+    }
 
     private void FixedUpdate()
     {
@@ -58,33 +61,30 @@ public class Player : MonoBehaviour
     void Move()
     {
         Vector2 input = move.action.ReadValue<Vector2>();
-        if(Sprint.action.IsPressed())
-        {
+        if (Sprint.action.IsPressed())
             speed = Sprintspeed;
-        }
-        else {
+        else
             speed = 5f;
-        }
+
+
         float targetX = input.x * speed;
 
 
-
-        // Check if grounded
         bool grounded = Mathf.Abs(rb.linearVelocity.y) < 0.01f;
 
         if (grounded)
         {
-            // Full control on ground
             rb.linearVelocity = new Vector2(targetX, rb.linearVelocity.y);
         }
         else
         {
-            // Air control: smoother movement in air
             float newX = Mathf.Lerp(rb.linearVelocity.x, targetX, airControl * Time.fixedDeltaTime);
             rb.linearVelocity = new Vector2(newX, rb.linearVelocity.y);
         }
-    }
 
+        anim.SetFloat("AnimSpeed", Mathf.Abs(rb.linearVelocity.x));
+        
+    }
 
     // Jumping
     void CheckJump()
