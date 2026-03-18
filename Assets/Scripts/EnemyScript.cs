@@ -55,7 +55,7 @@ public class EnemyScript : MonoBehaviour
     {
         yield return new WaitWhile(() => audioSource.isPlaying);
         Destroy(gameObject);
-    }
+    } 
        
 
 }

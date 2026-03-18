@@ -1,11 +1,16 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public static float sfxVolume;
+    public Slider volumeSlider;
+
+
     public GameObject PauseScreen;
+    
 
 
     public Animator anim;
@@ -24,17 +29,24 @@ public class Player : MonoBehaviour
     private int maxJumps = 2;
     public float airControl = 3f;   // <-- declared here
     Rigidbody2D rb;
-    
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
 
         paused = false;
         PauseScreen.SetActive(false);
-        rb = GetComponent<Rigidbody2D>();
         jumpCount = maxJumps;
+
+        float savedVolume = PlayerPrefs.GetFloat("volume", 1f);
+        AudioListener.volume = savedVolume;
+        volumeSlider.value = savedVolume;
+        volumeSlider.onValueChanged.AddListener(SetVolume);
+
+        SaveLevel();
     }
 
     // Update is called once per frame
@@ -128,7 +140,38 @@ public class Player : MonoBehaviour
     {
         if (Pause.action.triggered) PauseGame();
     }
-    
+
+
+
+
+
+
+
+
+    public void SetVolume(float value)
+    {
+        Debug.Log(value);
+
+        AudioListener.volume = value;
+        PlayerPrefs.SetFloat("volume", value);
+    }
+
+
+
+    public void SaveLevel()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString("SavedLevel", currentScene);
+        Debug.Log("Saved level: " + currentScene);
+    }
+
+
+
+
+
+
+
+
 
 
 }

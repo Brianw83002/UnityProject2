@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuScript : MonoBehaviour
 {
+    
     public AudioSource audioSource;
     public AudioClip clip;
 
@@ -43,6 +45,31 @@ public class MainMenuScript : MonoBehaviour
         
         audioSource.Play();
     }
+
+
+
+
+    public void LoadLevel()
+    {
+        string savedLevel = PlayerPrefs.GetString("SavedLevel", "Level1");
+        Debug.Log("Loading saved level: " + savedLevel);
+        SceneManager.LoadScene(savedLevel);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

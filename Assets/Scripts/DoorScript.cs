@@ -8,7 +8,7 @@ public class DoorScript : MonoBehaviour
     public Sprite doorClosed;
     public Sprite doorOpen;
     public GameObject prompt;
-
+    
     private SpriteRenderer spriteRenderer;
 
     private AudioSource audioSource;
@@ -38,6 +38,7 @@ public class DoorScript : MonoBehaviour
             
             if (isDoorLocked)
             {
+                audioSource.volume = Player.sfxVolume;
                 audioSource.clip = lockedSound;
                 audioSource.Play();
             }
@@ -130,6 +131,12 @@ public class DoorScript : MonoBehaviour
 
         SceneManager.LoadScene(GoToLevelName);
     }
+
+
+
+    
+    
+
 }
 
 
